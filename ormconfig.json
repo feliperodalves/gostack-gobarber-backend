@@ -1,10 +1,10 @@
 {
   "type": "postgres",
-  "host": "xxxxxxxx",
+  "host": "felipealves.tech",
   "port": 5432,
-  "username": "xxxxxxxx",
-  "password": "xxxxxxxx",
-  "database": "xxxxxxxx",
+  "username": "felipealves",
+  "password": "335473*fra",
+  "database": "gostack_gobarber",
   "entities": ["./src/models/*.ts"],
   "migrations": ["./src/database/migrations/*.ts"],
   "cli": {
