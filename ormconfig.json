@@ -5,9 +5,9 @@
   "username": "felipealves",
   "password": "335473*fra",
   "database": "gostack_gobarber",
-  "entities": ["./src/models/*.ts"],
-  "migrations": ["./src/database/migrations/*.ts"],
+  "entities": ["./src/modules/**/infra/typeorm/entities/*.ts"],
+  "migrations": ["./src/share/infra/typeorm/migrations/*.ts"],
   "cli": {
-    "migrationsDir": "./src/database/migrations"
+    "migrationsDir": "./src/share/infra/typeorm/migrations"
   }
 }
