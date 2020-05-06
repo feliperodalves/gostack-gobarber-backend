@@ -1,48 +1,25 @@
-import { Router, request } from 'express';
+import { Router } from 'express';
 import multer from 'multer';
-import { container } from 'tsyringe';
 
 import uploadConfig from '@config/upload';
 
-import CreateUserService from '@modules/users/services/CreateUserService';
-import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
+import UsersController from '@modules/users/infra/http/controllers/UsersController';
+import UserAvatarController from '@modules/users/infra/http/controllers/UserAvatarController';
 
 import ensureAuthentication from '@modules/users/infra/http/middlewares/ensureAuthentication';
 
 const usersRouters = Router();
+const usersController = new UsersController();
+const userAvatarController = new UserAvatarController();
 const upload = multer(uploadConfig);
 
-usersRouters.post('/', async (req, res) => {
-  const { name, email, password } = req.body;
-
-  const createUser = container.resolve(CreateUserService);
-  const user = await createUser.execute({
-    name,
-    email,
-    password,
-  });
-
-  delete user.password;
-
-  return res.json(user);
-});
+usersRouters.post('/', usersController.create);
 
 usersRouters.patch(
   '/avatar',
   ensureAuthentication,
   upload.single('avatar'),
-  async (req, res) => {
-    const updateUserAvatar = container.resolve(UpdateUserAvatarService);
-
-    const user = await updateUserAvatar.execute({
-      user_id: request.user.id,
-      avatarFileName: request.file.filename,
-    });
-
-    delete user.password;
-
-    return res.json(user);
-  },
+  userAvatarController.update,
 );
 
 export default usersRouters;
