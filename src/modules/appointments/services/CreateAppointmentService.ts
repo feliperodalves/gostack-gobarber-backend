@@ -8,6 +8,7 @@ import AppError from '@shared/errors/AppError';
 
 interface IRequest {
   provider_id: string;
+  user_id: string;
   date: Date;
 }
 
@@ -18,7 +19,11 @@ class CreateAppointmentService {
     private appointmentsRepository: IAppointmentsRepository,
   ) {}
 
-  public async execute({ provider_id, date }: IRequest): Promise<Appointment> {
+  public async execute({
+    provider_id,
+    user_id,
+    date,
+  }: IRequest): Promise<Appointment> {
     const appointmentDate = startOfHour(date);
 
     const findAppointmentInSameDateHour = await this.appointmentsRepository.findByDate(
@@ -29,8 +34,13 @@ class CreateAppointmentService {
       throw new AppError('This appointment is already booked');
     }
 
+    if (provider_id === user_id) {
+      throw new AppError('Can not create an appointment with yourself');
+    }
+
     const appointment = await this.appointmentsRepository.create({
       provider_id,
+      user_id,
       date: appointmentDate,
     });
 
