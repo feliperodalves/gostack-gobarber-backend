@@ -1,4 +1,4 @@
-import { startOfHour } from 'date-fns';
+import { startOfHour, isBefore, getHours } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
@@ -32,6 +32,16 @@ class CreateAppointmentService {
 
     if (findAppointmentInSameDateHour) {
       throw new AppError('This appointment is already booked');
+    }
+
+    if (isBefore(appointmentDate, Date.now())) {
+      throw new AppError('Can not create an appointment on a past date');
+    }
+
+    if (getHours(appointmentDate) < 8 || getHours(appointmentDate) > 17) {
+      throw new AppError(
+        'Appointment Hour outside comercial time (8am and 18pm)yarn ',
+      );
     }
 
     if (provider_id === user_id) {
