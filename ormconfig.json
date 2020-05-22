@@ -1,13 +1,27 @@
-{
-  "type": "postgres",
-  "host": "felipealves.tech",
-  "port": 5432,
-  "username": "felipealves",
-  "password": "335473*fra",
-  "database": "gostack_gobarber",
-  "entities": ["./src/modules/**/infra/typeorm/entities/*.ts"],
-  "migrations": ["./src/shared/infra/typeorm/migrations/*.ts"],
-  "cli": {
-    "migrationsDir": "/src/shared/infra/typeorm/migrations"
+[
+  {
+    "name": "default",
+    "type": "postgres",
+    "host": "felipealves.tech",
+    "port": 5432,
+    "username": "felipealves",
+    "password": "335473*fra",
+    "database": "gostack_gobarber",
+    "entities": ["./src/modules/**/infra/typeorm/entities/*.ts"],
+    "migrations": ["./src/shared/infra/typeorm/migrations/*.ts"],
+    "cli": {
+      "migrationsDir": "/src/shared/infra/typeorm/migrations"
+    }
+  },
+  {
+    "name": "mongo",
+    "type": "mongodb",
+    "host": "felipealves-kyiba.gcp.mongodb.net",
+    "port": 27017,
+    "username": "felipealves",
+    "password": "35WfruRKuDcVSa2a",
+    "database": "gostack_gobarber",
+    "entities": ["./src/modules/**/infra/typeorm/schemas/*.ts"],
+    "useUnifiedTopology": true
   }
-}
+]
