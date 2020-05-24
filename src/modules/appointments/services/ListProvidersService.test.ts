@@ -1,17 +1,25 @@
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import ListProvidersService from './ListProvidersService';
 
 let fakeUsersRepository: FakeUsersRepository;
+let fakeCacheProvider: FakeCacheProvider;
 let listProvidersService: ListProvidersService;
 
 describe('List Providers', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
-
-    listProvidersService = new ListProvidersService(fakeUsersRepository);
+    fakeCacheProvider = new FakeCacheProvider();
+    listProvidersService = new ListProvidersService(
+      fakeUsersRepository,
+      fakeCacheProvider,
+    );
   });
 
-  it('should be able to list all providers', async () => {
+  it('should be able to list all providers and use cache', async () => {
+    const saveCache = jest.spyOn(fakeCacheProvider, 'save');
+    const recoverCache = jest.spyOn(fakeCacheProvider, 'recover');
+
     const user1 = await fakeUsersRepository.create({
       name: 'John Doe',
       email: 'johndoe@example.com',
@@ -35,5 +43,12 @@ describe('List Providers', () => {
     });
 
     expect(providers).toEqual([user1, user2]);
+    expect(saveCache).toHaveBeenCalled();
+
+    await listProvidersService.execute({
+      user_id: loggedUser.id,
+    });
+
+    expect(recoverCache).toHaveBeenCalled();
   });
 });
