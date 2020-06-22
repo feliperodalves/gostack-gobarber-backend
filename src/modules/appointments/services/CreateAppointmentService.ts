@@ -49,7 +49,7 @@ class CreateAppointmentService {
 
     if (getHours(appointmentDate) < 8 || getHours(appointmentDate) > 17) {
       throw new AppError(
-        'Appointment Hour outside comercial time (8am and 18pm)yarn ',
+        'Appointment Hour outside comercial time (8am and 18pm)',
       );
     }
 
